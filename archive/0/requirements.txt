@@ -1,0 +1,30 @@
+# Requirements:
+  # - Frontend ToDo List app, vanilla JS, no frameworks
+  # - Form with an input field and a submit button
+  # - List of items
+  # - Both should be implemented as modules with expected API
+
+# Form module API:
+  # - Included with link[rel="import"][name="form"][href="some/path/form.htm"], link[rel="stylesheet"][href="some/path/form.css"], script[src="some/path/form.js"][defer]
+  # - Should provide an abstract form object with an init method that should be called to initialize the form
+  # - init method should accept a list object and store it for later use
+  # - list.add method should be called when form is submitted successfully and an object with a text property should be passed to it
+
+# Form Requirements:
+  # - Should have a text input field
+  # - Should have a submit button "Add"
+  # - Should handle form submit event
+  # - Should require input field to have non-empty value without leading/trailing spaces
+  # - Should clear the input field after successful submit
+
+# List module API:
+  # - Included with link[rel="import"][name="list"][href="some/path/list.htm"], link[rel="stylesheet"][href="some/path/list.css"], script[src="some/path/list.js"][defer]
+  # - Should provide an abstract list object with an init method that should be called to initialize the list
+  # - add method should accept an object with a text property and add a list item with this text to the list
+
+# List Requirements:
+  # - Should show a list of items with a text
+
+# Utilitary Requirements:
+  # - Modules should have standalone html files for isolated testing.
+  # - Standalone html files should test module API.
