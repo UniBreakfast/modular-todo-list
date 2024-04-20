@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head id="head">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' style=' background:black'><text y='16' font-family='Trebuchet MS' font-weight='900' fill='orange'>UB</text></svg>">
+
+  <link rel="stylesheet" href="remove-mod.css">
+  <script src="remove-mod.js" defer></script>
+
+  <title>Remove Mod Module</title>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const ul = document.querySelector('ul');
+      const item = ul.children[1];
+
+      const listLikeProbe = {
+        remove(i) {
+          const li = ul.children[i];
+
+          li.remove();
+        }
+      };
+
+      removeMod.init(listLikeProbe);
+      removeMod.modify(item);
+    });
+  </script>
+</head>
+
+<body id="body">
+  <ul>
+    <li>First</li>
+    <li>Second</li>
+    <li>Third</li>
+  </ul>
+</body>
+
+</html>
