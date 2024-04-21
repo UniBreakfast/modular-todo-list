@@ -6,27 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' style=' background:black'><text y='16' font-family='Trebuchet MS' font-weight='900' fill='orange'>UB</text></svg>">
 
-  <link rel="import" name="form" href="form.htm">
-  <link rel="stylesheet" href="form.css">
-  <script src="form.js" defer></script>
+  <link rel="stylesheet" href="check-mod.css">
+  <script src="check-mod.js" defer></script>
 
-  <title>Form Module</title>
+  <title>Check Mod Module</title>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const listLikeProbe = {
-        add({text}) {
-          console.log('Adding:', text);
-        }
-      };
-      
-      form.init(listLikeProbe);
+    document.addEventListener('DOMContentLoaded', async () => {
+      const ul = document.querySelector('ul');
+      const item = ul.children[1];
+
+      checkMod.init();
+      checkMod.modify(item);
     });
   </script>
 </head>
 
 <body id="body">
-
+  <ul>
+    <li>First</li>
+    <li>Second</li>
+    <li>Third</li>
+  </ul>
 </body>
 
 </html>

@@ -6,27 +6,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' style=' background:black'><text y='16' font-family='Trebuchet MS' font-weight='900' fill='orange'>UB</text></svg>">
 
-  <link rel="import" name="form" href="form.htm">
-  <link rel="stylesheet" href="form.css">
-  <script src="form.js" defer></script>
+  <script src="record-storage.js" defer></script>
 
-  <title>Form Module</title>
+  <title>Record Storage Module</title>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      const form = document.querySelector('form');
+      
       const listLikeProbe = {
         add({text}) {
           console.log('Adding:', text);
         }
       };
       
-      form.init(listLikeProbe);
+      recordStorage.init(listLikeProbe);
+
+      form.onsubmit = e => {
+        e.preventDefault();
+        
+        const text = form.text.value;
+        
+        recordStorage.add({text});
+        form.text.value = '';
+      };
     });
   </script>
 </head>
 
 <body id="body">
-
+  <form>
+    <input type="text" name="text" placeholder="text" required>
+    <button type="submit">Add</button>
+  </form>
 </body>
 
 </html>

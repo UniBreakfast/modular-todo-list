@@ -5,7 +5,9 @@ Requirements:
   - Form with an input field and a submit button
   - List of items
   - Sumbitting the form should add a new item to the list
-  - Both should be implemented as modules with expected API
+  - Items can be deleted by clicking on "delete" button next to them
+  - Items can be (un)checked with a checkbox on the left side of the item or by clicking on the item text
+  - Form, list, remove mod and check mod should be implemented as modules with expected API
 
 Form module API:
   - Included with link[rel="import"][name="form"][href="some/path/form.htm"], link[rel="stylesheet"][href="some/path/form.css"], script[src="some/path/form.js"][defer]
@@ -23,10 +25,25 @@ Form Requirements:
 List module API:
   - Included with link[rel="import"][name="list"][href="some/path/list.htm"], link[rel="stylesheet"][href="some/path/list.css"], script[src="some/path/list.js"][defer]
   - Should provide an abstract list object with an init method that should be called to initialize the list
+  - init method should accept optional modifier objects and store them for later use
   - add method should accept an object with a text property and add a list item with this text to the list
+  - If a modifier object with a modify method was passed to the init method, it should be called with a list item before it`s added to the list
+  - remove method should accept an index of the item to be removed and remove it from the list
 
 List Requirements:
   - Should show a list of items with a text
+
+Remove Mod module API:
+  - Included with link[rel="stylesheet"][href="some/path/remove-mod.css"], script[src="some/path/remove-mod.js"][defer]
+  - Should provide an abstract removeMod object with an init method that should be called to initialize the removeMod
+  - init method should accept a list object and store it for later use
+  - modify method should accept a list item and add a "delete" button before it`s end
+  - list.remove method should be called when "delete" button is clicked and an index of the item to be removed should be passed to it
+
+Check Mod module API:
+  - Included with link[rel="stylesheet"][href="some/path/check-mod.css"], script[src="some/path/check-mod.js"][defer]
+  - Should provide an abstract checkMod object with an init method that should be called to initialize the checkMod
+  - modify method should accept a list item and wrap it`s text in a label with a checkbox before it
 
 Utilitary Requirements:
   - Modules should have standalone html files for isolated testing
