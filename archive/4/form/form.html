@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head id="head">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' style=' background:black'><text y='16' font-family='Trebuchet MS' font-weight='900' fill='orange'>UB</text></svg>">
+
+  <link rel="import" name="form" href="form.htm">
+  <link rel="stylesheet" href="form.css">
+  <script src="form.js" defer></script>
+
+  <title>Form Module</title>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const listLikeProbe = {
+        add({text}) {
+          console.log('Adding:', text);
+        }
+      };
+      
+      form.init(listLikeProbe);
+    });
+  </script>
+</head>
+
+<body id="body">
+
+</body>
+
+</html>

@@ -5,7 +5,7 @@ Requirements:
   - Form with an input field and a submit button
   - List of items
   - Sumbitting the form should add a new item to the list
-  - Both should be implemented as modules with expected API
+  - Form, list and record storage should be implemented as modules with expected API
 
 Form module API:
   - Included with link[rel="import"][name="form"][href="some/path/form.htm"], link[rel="stylesheet"][href="some/path/form.css"], script[src="some/path/form.js"][defer]
