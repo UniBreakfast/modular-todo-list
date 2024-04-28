@@ -1,9 +1,9 @@
 const form = (() => {
-  let listModule;
+  let storageModule;
 
   return {
-    init(list) {
-      listModule = list;
+    init(recordStorage) {
+      storageModule = recordStorage;
       
       appendForm();
 
@@ -36,7 +36,7 @@ const form = (() => {
     const form = e.target;
     const text = form.text.value;
 
-    listModule.add({text});
+    storageModule.add({text});
 
     form.reset();
   }

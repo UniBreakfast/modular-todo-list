@@ -1,0 +1,227 @@
+#! project://todo.txt
+
+Requirements:
+  - Frontend ToDo List app, vanilla JS, no frameworks
+  - Form with an input field and a submit button
+  - List of items
+  - Sumbitting the form should add a new item to the list
+  - Items can be deleted by clicking on "delete" button next to them
+  - Items can be (un)checked with a checkbox on the left side of the item or by clicking on the item text
+  - Form, list, record storage, check mod and remove mod should be implemented as modules with expected API
+
+Form module API:
+  - Included with link[rel="import"][name="form"][href="some/path/form.htm"], link[rel="stylesheet"][href="some/path/form.css"], script[src="some/path/form.js"][defer]
+  - Should provide an abstract form object with an init method that should be called to initialize the form
+  - init method should accept a recordStorage object and store it for later use
+  - recordStorage.add method should be called when form is submitted successfully and an object with a text property should be passed to it
+
+Form Requirements:
+  - Should have a text input field
+  - Should have a submit button "Add"
+  - Should handle form submit event
+  - Should require input field to have non-empty value without leading/trailing spaces
+  - Should clear the input field after successful submit
+
+Record Storage module API:
+  - Included with script[src="some/path/record-storage.js"][defer]
+  - Should provide an abstract recordStorage object with an init method that should be called to initialize the recordStorage
+  - init method should accept a list object and store it for later use
+  - add method should accept an object with a text property and store a record with this text
+  - list.add method should be called when a record is added to the storage and an object with a text property should be passed to it
+  - remove method should accept an index of a record to remove it from the storage
+  - list.remove method should be called when a record is removed from the storage and an index of the removed record should be passed to it
+  - update method should accept an index of a record and a boolean value to update it`s status
+  - list.update method should be called when a record is updated and an index of the updated record and current object state should be passed to it
+
+List module API:
+  - Included with link[rel="import"][name="list"][href="some/path/list.htm"], link[rel="stylesheet"][href="some/path/list.css"], script[src="some/path/list.js"][defer]
+  - Should provide an abstract list object with an init method that should be called to initialize the list
+  - init method should accept optional modifier objects and store them for later use
+  - add method should accept an object with a text property and add a list item with this text to the list
+  - If a modifier object with a modify method was passed to the init method, it should be called with a list item before it`s added to the list
+  - remove method should accept an index of the item to be removed and remove it from the list
+  - update method should accept an index of the item to be updated and a record object with a text and checked properties and replace the list item by that index with a new one recreated from the record object
+
+List Requirements:
+  - Should show a list of items with a text
+
+Remove Mod module API:
+  - Included with link[rel="stylesheet"][href="some/path/remove-mod.css"], script[src="some/path/remove-mod.js"][defer]
+  - Should provide an abstract removeMod object with an init method that should be called to initialize the removeMod
+  - init method should accept a recordStorage object and store it for later use
+  - modify method should accept a list item and add a "delete" button before it`s end
+  - recordStorage.remove method should be called when "delete" button is clicked and an index of the item to be removed should be passed to it
+
+Check Mod module API:
+  - Included with link[rel="stylesheet"][href="some/path/check-mod.css"], script[src="some/path/check-mod.js"][defer]
+  - Should provide an abstract checkMod object with an init method that should be called to initialize the checkMod
+  - init method should accept a recordStorage object and store it for later use
+  - modify method should accept a list item and wrap it`s text in a label with a checkbox before it
+  - recordStorage.update method should be called when checkbox is checked/unchecked and an index of the item to be updated and a boolean value should be passed to it
+
+Utilitary Requirements:
+  - Modules should have standalone html files for isolated testing
+  - Standalone html files should test module API
+
+
+Form module requirements:
+
+  Interfaces:
+
+    Page HTML File is supposed to include:
+      - <link rel="import" name="form" href="path/form.htm">
+      - <link rel="stylesheet" href="path/form.css">
+      - <script src="form/path.js" defer></script>
+
+    Form module should expect:
+      - init(storage) method to be called at the start of the application
+
+    Governing Script JS File will expect for global variable `form` to have an object with the following methods:
+      - init(storage) - render the form into the page body element, save the storage object for later use, and set up event listeners
+
+    Storage module will expect:
+      - storage.add({text}) method to be called from the inside of the Form module eventually when the form is submitted
+    
+    User should be able to (after `init` method is called):
+      - see a text input
+      - see a submit button with the text "Add"
+      - write or paste text into the text input
+      - submit the form by clicking the submit button leading to the storage.add({text}) method being called with an object containing the text input value as the only property `text` being passed as an argument
+
+  Other requirements (preferable):
+    - module should be implemented in a separate folder with four files: `form.htm`, `form.css`, `form.js` and `form.html`
+    - `form.htm` should contain the form HTML structure without any html structure around it, it can appear on the page only as a result of the form module initialization done with JS
+    - `form.css` should contain the styles for the form provided in `form.htm` without any additional styles, ensure that selectors are specific enough to avoid conflicts with styles from other modules
+    - `form.js` should contain the form module implementation
+    - `form.html` should be a standalone page that allows the user to test the form module in isolation
+
+Record Storage module requirements:
+
+  Interfaces:
+
+    Page HTML File is supposed to include:
+      - <script src="path/record-storage.js" defer></script>
+
+    Record Storage module should expect:
+      - init(list) method to be called at the start of the application
+      - to be passed to the Form module init method as an argument at the start of the application
+      - to be passed to the Remove Mod module init method as an argument at the start of the application
+      - to be passed to the Check Mod module init method as an argument at the start of the application
+      - add({text}) method to be called from the inside of the Form module eventually when a record is added
+      - remove(index) method to be called from the inside of the Remove Mod module eventually when a record is removed
+      - update(index, checked) method to be called from the inside of the Check Mod module eventually when a record is updated
+
+    Governing Script JS File will expect for global variable `recordStorage` to have an object with the following methods:
+      - init(list) - save the list object for later use
+      - add({text}) - add a record with the text property to the storage and call list.add({text}) method
+      - remove(index) - remove a record with the index from the storage and call list.remove(index) method
+      - update(index, checked) - update a record with the index with the checked property and call list.update(index, record) method
+
+    List module will expect:
+      - list.add({text}) method to be called from the inside of the Record Storage module eventually when a record is added
+      - list.remove(index) method to be called from the inside of the Record Storage module eventually when a record is removed
+      - list.update(index, record) method to be called from the inside of the Record Storage module eventually when a record is updated
+    
+  Other requirements (preferable):
+    - module should be implemented in a separate folder with two files: `record-storage.js` and `record-storage.html`
+    - `record-storage.js` should contain the record storage module implementation
+    - `record-storage.html` should be a standalone page that allows the user to test the record storage module in isolation
+
+List module requirements:
+
+  Interfaces:
+
+    Page HTML File is supposed to include:
+      - <link rel="import" name="list" href="path/list.htm">
+      - <link rel="stylesheet" href="path/list.css">
+      - <script src="path/list.js" defer></script>
+
+    List module should expect:
+      - init(modifiers) method to be called at the start of the application and modifiers objects to be passed as arguments (optional)
+      - to be passed to the Record Storage module init method as an argument at the start of the application
+      - add({text}) method to be called from the inside of the Record Storage module eventually when a record is added
+      - remove(index) method to be called from the inside of the Record Storage module eventually when a record is removed
+      - update(index, record) method to be called from the inside of the Record Storage module eventually when a record is updated
+
+    Governing Script JS File will expect for global variable `list` to have an object with the following methods:
+      - init(...modifiers) - render the list into the page body element, save the modifiers object for later use
+      - add({text}) - add a list item with the text property to the list
+      - remove(index) - remove a list item with the index from the list
+      - update(index, record) - replace a list item with the index with a new one recreated from the record object
+
+    Modifiers objects will expect:
+      - mod.modify(item, ?record) method to be called from the inside of the List module eventually when a list item is added
+
+    Record Storage module will expect:
+      - recordStorage.add({text}) method to be called from the inside of the List module eventually when a list item is added
+      - recordStorage.remove(index) method to be called from the inside of the List module eventually when a list item is removed
+      - recordStorage.update(index, record) method to be called from the inside of the List module eventually when a list item is updated
+
+    User should be able to (after `init` method is called):
+      - see a list of items with text
+
+  Other requirements (preferable):
+    - module should be implemented in a separate folder with four files: `list.htm`, `list.css`, `list.js` and `list.html`
+    - `list.htm` should contain the list HTML structure without any html structure around it, it can appear on the page only as a result of the list module initialization done with JS
+    - `list.css` should contain the styles for the list provided in `list.htm` without any additional styles, ensure that selectors are specific enough to avoid conflicts with styles from other modules
+    - `list.js` should contain the list module implementation
+    - `list.html` should be a standalone page that allows the user to test the list module in isolation
+
+Remove Mod module requirements:
+
+  Interfaces:
+
+    Page HTML File is supposed to include:
+      - <link rel="stylesheet" href="path/remove-mod.css">
+      - <script src="path/remove-mod.js" defer></script>
+
+    Remove Mod module should expect:
+      - init(storage) method to be called at the start of the application
+      - to be passed to the List module init method as an argument at the start of the application
+      - modify(item) method to be called from the inside of the List module eventually when a list item is added
+
+    Governing Script JS File will expect for global variable `removeMod` to have an object with the following methods:
+      - init(storage) - save the storage object for later use
+      - modify(item) - add a "delete" button before the end of the item
+
+    Record Storage module will expect:
+      - recordStorage.remove(index) method to be called from the inside of the Remove Mod module eventually when the "delete" button is clicked
+
+    User should be able to (after `modify` method is called on each list item):
+      - see a "delete" button next to each list item
+
+  Other requirements (preferable):
+    - module should be implemented in a separate folder with three files: `remove-mod.css`, `remove-mod.js` and `remove-mod.html`
+    - `remove-mod.css` should contain the styles for the remove mod without any additional styles, ensure that selectors are specific enough to avoid conflicts with styles from other modules
+    - `remove-mod.js` should contain the remove mod module implementation
+    - `remove-mod.html` should be a standalone page that allows the user to test the remove mod module in isolation
+
+Check Mod module requirements:
+
+  Interfaces:
+
+    Page HTML File is supposed to include:
+      - <link rel="stylesheet" href="path/check-mod.css">
+      - <script src="path/check-mod.js" defer></script>
+
+    Check Mod module should expect:
+      - init(storage) method to be called at the start of the application
+      - to be passed to the List module init method as an argument at the start of the application
+      - modify(item, ?record) method to be called from the inside of the List module eventually when a list item is added
+
+    Governing Script JS File will expect for global variable `checkMod` to have an object with the following methods:
+      - init(storage) - save the storage object for later use
+      - modify(item, ?record) - wrap the item text in a label with a checkbox before it, while taking the state from the record object into account if it was passed
+
+    Record Storage module will expect:
+      - recordStorage.update(index, checked) method to be called from the inside of the Check Mod module eventually when the checkbox is checked/unchecked
+
+    User should be able to (after `modify` method is called on each list item):
+      - see a checkbox on the left side of each list item
+      - (un)check the checkbox by clicking on it or on the item text
+
+  Other requirements (preferable):
+    - module should be implemented in a separate folder with three files: `check-mod.css`, `check-mod.js` and `check-mod.html`
+    - `check-mod.css` should contain the styles for the check mod without any additional styles, ensure that selectors are specific enough to avoid conflicts with styles from other modules
+    - `check-mod.js` should contain the check mod module implementation
+    - `check-mod.html` should be a standalone page that allows the user to test the check mod module in isolation
